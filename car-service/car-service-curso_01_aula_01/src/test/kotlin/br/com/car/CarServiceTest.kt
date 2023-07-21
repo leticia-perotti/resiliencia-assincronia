@@ -10,7 +10,91 @@ import io.mockk.mockk
 import io.mockk.verify
 
 class CarServiceTest : FunSpec({
+
     val car = CarFixture.getCar()
+
+    lateinit var carRepository: CarRepository
+    lateinit var carHttpService: CarHttpService
+    lateinit var carService: CarService
+
+    beforeTest{
+        carRepository = mockk {
+            every { listAll() } returns listOf(car)
+            every { listByModel(any()) } returns listOf(car)
+        }
+
+        carHttpService = mockk {
+            coEvery { getByModel(any()) } returns mockk()
+            //coEvery pois usa o Coroutines
+
+        }
+
+        carService = carService(carRepository, carHttpService)
+
+    }
+
+    test("tem que retornar todos os itens de um carro de um modelo especifico quando carModel nao e nulo"){
+        val actual = carService.list("Gol")
+
+        //aqui ele verifica se foi chamado exatamente uma vez o listByModel e nunhuma o listAll
+        verify(exactly = 1) { carRepository.listByModel(any()) }
+        varify(exactly = 0) { carRepository.listAll() }
+
+    }
+
+    test("retorna tudo se nao foi passado nenhum paramentro de carModel"){
+        val actual = carService.list(null)
+
+        //aqui ele verifica se foi chamado exatamente uma vez o listByModel e nunhuma o listAll
+        verify(exactly = 0) { carRepository.listByModel(any()) }
+        varify(exactly = 1) { carRepository.listAll() }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*    val car = CarFixture.getCar()
 
     lateinit var carRepository: CarRepository
     lateinit var carHttpService: CarHttpService
@@ -42,5 +126,5 @@ class CarServiceTest : FunSpec({
         verify(exactly = 0) { carRepository.listByModel(any()) }
         verify(exactly = 1) { carRepository.listAll() }
     }
-
+*/
 })
