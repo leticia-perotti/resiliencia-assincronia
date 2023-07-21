@@ -11,5 +11,8 @@ import org.springframework.context.annotation.ComponentScan
 class CarServiceApplication
 
 fun main(args: Array<String>) {
+    //val ds = circuitBreakerConfiguration.getCircuitBreaker().decorateSupplier { listTest() }
+    //Acima está a configuração caso não utilzar o retrofit
+
     runApplication<CarServiceApplication>(*args)
 }
